@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Badminton Player Dashboard</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -17,24 +16,10 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             color: #333;
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-        }
-
-        /* Disable right-click context menu */
-        body {
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -khtml-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
         }
         
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -44,7 +29,7 @@
             border-radius: 15px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             padding: 40px;
-            max-width: 500px;
+            max-width: 400px;
             margin: 100px auto;
             text-align: center;
         }
@@ -75,7 +60,7 @@
         
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
             margin-bottom: 30px;
         }
@@ -162,7 +147,7 @@
             border-color: #667eea;
         }
         
-        .login-btn, .set-password-btn {
+        .login-btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 12px 30px;
@@ -173,10 +158,9 @@
             font-weight: bold;
             transition: transform 0.3s ease;
             width: 100%;
-            margin-bottom: 10px;
         }
         
-        .login-btn:hover, .set-password-btn:hover {
+        .login-btn:hover {
             transform: translateY(-2px);
         }
         
@@ -191,43 +175,30 @@
             margin-top: 20px;
         }
         
-        .error, .success {
+        .error {
+            color: #e74c3c;
             margin-top: 10px;
             font-size: 14px;
-            padding: 10px;
-            border-radius: 5px;
         }
         
-        .error {
-            background: #fee;
-            color: #e74c3c;
-            border: 1px solid #fcc;
+        .activity-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 10px;
         }
         
-        .success {
-            background: #efe;
-            color: #27ae60;
-            border: 1px solid #cfc;
+        .active {
+            background-color: #27ae60;
         }
         
-        .chart-container {
-            height: 300px;
-            margin-top: 20px;
+        .inactive {
+            background-color: #e74c3c;
         }
         
-        .password-setup {
-            display: none;
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-        
-        .setup-link {
-            color: #667eea;
-            cursor: pointer;
-            text-decoration: underline;
-            font-size: 14px;
+        .moderate {
+            background-color: #f39c12;
         }
 
         .performance-bar {
@@ -242,16 +213,6 @@
             height: 100%;
             border-radius: 10px;
             transition: width 0.3s ease;
-        }
-
-        /* Disable text selection and context menu */
-        .no-select {
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -khtml-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
         }
 
         @media (max-width: 768px) {
@@ -269,7 +230,7 @@
         }
     </style>
 </head>
-<body class="no-select" oncontextmenu="return false;">
+<body>
     <div class="container">
         <!-- Login Screen -->
         <div id="login" class="login-container">
@@ -283,35 +244,14 @@
                 </div>
                 <div class="form-group">
                     <label for="password">Password:</label>
-                    <input type="password" id="password" placeholder="Enter your password" required>
+                    <input type="password" id="password" placeholder="Enter password" required>
                 </div>
                 <button type="submit" class="login-btn">Login</button>
-                <div id="error" class="error" style="display: none;"></div>
-                <div id="success" class="success" style="display: none;"></div>
+                <div id="error" class="error"></div>
             </form>
-            
-            <div style="margin-top: 20px;">
-                <span class="setup-link" onclick="togglePasswordSetup()">First time? Set your password</span>
-            </div>
-            
-            <div id="passwordSetup" class="password-setup">
-                <h3 style="margin-bottom: 15px; color: #667eea;">Set Your Password</h3>
-                <div class="form-group">
-                    <label for="setupPlayer">Select Player:</label>
-                    <select id="setupPlayer" required>
-                        <option value="">Choose your name...</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="newPassword">New Password:</label>
-                    <input type="password" id="newPassword" placeholder="Enter new password" required>
-                </div>
-                <div class="form-group">
-                    <label for="confirmPassword">Confirm Password:</label>
-                    <input type="password" id="confirmPassword" placeholder="Confirm password" required>
-                </div>
-                <button type="button" class="set-password-btn" onclick="setPassword()">Set Password</button>
-            </div>
+            <p style="color: #666; font-size: 12px; margin-top: 20px;">
+                Default password: "badminton123"
+            </p>
         </div>
 
         <!-- Dashboard Screen -->
@@ -344,11 +284,24 @@
                     </div>
                 </div>
 
-                <!-- Activity Trends Chart -->
+                <!-- Activity Status -->
                 <div class="stat-card">
-                    <h3>📈 Activity Trends</h3>
-                    <div class="chart-container">
-                        <canvas id="activityChart"></canvas>
+                    <h3>📊 Activity Status</h3>
+                    <div class="stat-row">
+                        <span class="stat-label">Negative Balance Weeks:</span>
+                        <span class="stat-value" id="negativeWeeks"></span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Not Played Since:</span>
+                        <span class="stat-value" id="notPlayedSince"></span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Longest Weekly Streak:</span>
+                        <span class="stat-value positive" id="longestStreak"></span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Current Weekly Streak:</span>
+                        <span class="stat-value" id="currentStreak"></span>
                     </div>
                 </div>
 
@@ -376,43 +329,6 @@
                     </div>
                 </div>
 
-                <!-- Financial Balance Chart -->
-                <div class="stat-card">
-                    <h3>💳 Balance Overview</h3>
-                    <div class="chart-container">
-                        <canvas id="balanceChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Activity Status -->
-                <div class="stat-card">
-                    <h3>📊 Activity Status</h3>
-                    <div class="stat-row">
-                        <span class="stat-label">Negative Balance Weeks:</span>
-                        <span class="stat-value" id="negativeWeeks"></span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-label">Not Played Since:</span>
-                        <span class="stat-value" id="notPlayedSince"></span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-label">Longest Weekly Streak:</span>
-                        <span class="stat-value positive" id="longestStreak"></span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-label">Current Weekly Streak:</span>
-                        <span class="stat-value" id="currentStreak"></span>
-                    </div>
-                </div>
-
-                <!-- Calories Burned Chart -->
-                <div class="stat-card">
-                    <h3>🔥 Calorie Tracking</h3>
-                    <div class="chart-container">
-                        <canvas id="caloriesChart"></canvas>
-                    </div>
-                </div>
-
                 <!-- August 2025 Stats -->
                 <div class="stat-card">
                     <h3>📅 August 2025</h3>
@@ -433,258 +349,144 @@
                         <span class="stat-value positive" id="augCalories"></span>
                     </div>
                 </div>
-
-                <!-- Hours Distribution Chart -->
-                <div class="stat-card">
-                    <h3>⏰ Hours Distribution</h3>
-                    <div class="chart-container">
-                        <canvas id="hoursChart"></canvas>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Disable F12, Ctrl+Shift+I, Ctrl+U, etc.
-        document.addEventListener('keydown', function(e) {
-            if (e.keyCode == 123 || // F12
-                (e.ctrlKey && e.shiftKey && e.keyCode == 73) || // Ctrl+Shift+I
-                (e.ctrlKey && e.keyCode == 85) || // Ctrl+U
-                (e.ctrlKey && e.shiftKey && e.keyCode == 67) || // Ctrl+Shift+C
-                (e.ctrlKey && e.shiftKey && e.keyCode == 74)) { // Ctrl+Shift+J
-                e.preventDefault();
-                return false;
-            }
-        });
-
-        // Disable right-click
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            return false;
-        });
-
-        // Player data and passwords (stored in memory)
-        let playerPasswords = {};
-        
+        // Player data based on your Excel sheets
         const playerData = {
             'Tanvir': {
                 balance: 'AED 280', totalPaid: 'AED 10,788', totalExpense: 'AED 10,508', delayPay: 'AED 0',
                 negativeWeeks: 0, notPlayedSince: '-', longestStreak: 32, currentStreak: 32,
                 daysPlayed: '76/84', hoursPlayed: 147, hoursLast30: 18, caloriesBurned: '63,944',
-                augDaysPlayed: '9/9', augHoursPlayed: 18, augCourtHours: '16.1', augCalories: '8,194',
-                balanceNum: 280, hoursNum: 147, caloriesNum: 63944
+                augDaysPlayed: '9/9', augHoursPlayed: 18, augCourtHours: '16.1', augCalories: '8,194'
             },
             'Abhishek': {
                 balance: 'AED 83', totalPaid: 'AED 10,868', totalExpense: 'AED 10,786', delayPay: 'AED 0',
                 negativeWeeks: 0, notPlayedSince: '-', longestStreak: 26, currentStreak: 1,
                 daysPlayed: '65/84', hoursPlayed: 125, hoursLast30: 10, caloriesBurned: '51,673',
-                augDaysPlayed: '5/9', augHoursPlayed: 10, augCourtHours: '9.0', augCalories: '4,377',
-                balanceNum: 83, hoursNum: 125, caloriesNum: 51673
+                augDaysPlayed: '5/9', augHoursPlayed: 10, augCourtHours: '9.0', augCalories: '4,377'
             },
             'Sumesh': {
                 balance: 'AED (41)', totalPaid: 'AED 9,964', totalExpense: 'AED 10,005', delayPay: 'AED 0',
                 negativeWeeks: 7, notPlayedSince: '-', longestStreak: 28, currentStreak: 10,
                 daysPlayed: '58/84', hoursPlayed: 115, hoursLast30: 18, caloriesBurned: '49,228',
-                augDaysPlayed: '9/9', augHoursPlayed: 18, augCourtHours: '16.1', augCalories: '8,081',
-                balanceNum: -41, hoursNum: 115, caloriesNum: 49228
+                augDaysPlayed: '9/9', augHoursPlayed: 18, augCourtHours: '16.1', augCalories: '8,081'
             },
             'Varun': {
                 balance: 'AED (99)', totalPaid: 'AED 10,210', totalExpense: 'AED 10,309', delayPay: 'AED 0',
                 negativeWeeks: 4, notPlayedSince: '3', longestStreak: 18, currentStreak: 0,
                 daysPlayed: '66/84', hoursPlayed: 125, hoursLast30: 4, caloriesBurned: '53,042',
-                augDaysPlayed: '2/9', augHoursPlayed: 4, augCourtHours: '3.6', augCalories: '1,512',
-                balanceNum: -99, hoursNum: 125, caloriesNum: 53042
+                augDaysPlayed: '2/9', augHoursPlayed: 4, augCourtHours: '3.6', augCalories: '1,512'
             },
             'Sanjeev': {
                 balance: 'AED 290', totalPaid: 'AED 8,979', totalExpense: 'AED 8,689', delayPay: 'AED 0',
                 negativeWeeks: 0, notPlayedSince: '-', longestStreak: 14, currentStreak: 4,
                 daysPlayed: '53/84', hoursPlayed: 106, hoursLast30: 12, caloriesBurned: '44,684',
-                augDaysPlayed: '6/9', augHoursPlayed: 12, augCourtHours: '10.5', augCalories: '5,273',
-                balanceNum: 290, hoursNum: 106, caloriesNum: 44684
+                augDaysPlayed: '6/9', augHoursPlayed: 12, augCourtHours: '10.5', augCalories: '5,273'
             },
             'Ritesh': {
                 balance: 'AED (48)', totalPaid: 'AED 8,619', totalExpense: 'AED 8,667', delayPay: 'AED 0',
                 negativeWeeks: 1, notPlayedSince: '-', longestStreak: 35, currentStreak: 5,
                 daysPlayed: '59/84', hoursPlayed: 118, hoursLast30: 18, caloriesBurned: '50,666',
-                augDaysPlayed: '9/9', augHoursPlayed: 18, augCourtHours: '16.1', augCalories: '8,145',
-                balanceNum: -48, hoursNum: 118, caloriesNum: 50666
+                augDaysPlayed: '9/9', augHoursPlayed: 18, augCourtHours: '16.1', augCalories: '8,145'
             },
             'Satish': {
                 balance: 'AED 393', totalPaid: 'AED 8,429', totalExpense: 'AED 8,036', delayPay: 'AED 0',
                 negativeWeeks: 0, notPlayedSince: '-', longestStreak: 14, currentStreak: 5,
                 daysPlayed: '64/84', hoursPlayed: 122, hoursLast30: 18, caloriesBurned: '51,453',
-                augDaysPlayed: '9/9', augHoursPlayed: 18, augCourtHours: '16.1', augCalories: '7,969',
-                balanceNum: 393, hoursNum: 122, caloriesNum: 51453
+                augDaysPlayed: '9/9', augHoursPlayed: 18, augCourtHours: '16.1', augCalories: '7,969'
             },
             'Harsh': {
                 balance: 'AED (34)', totalPaid: 'AED 5,975', totalExpense: 'AED 6,009', delayPay: 'AED 0',
                 negativeWeeks: 1, notPlayedSince: '-', longestStreak: 14, currentStreak: 1,
                 daysPlayed: '40/84', hoursPlayed: 72, hoursLast30: 2, caloriesBurned: '30,327',
-                augDaysPlayed: '1/9', augHoursPlayed: 2, augCourtHours: '1.6', augCalories: '792',
-                balanceNum: -34, hoursNum: 72, caloriesNum: 30327
+                augDaysPlayed: '1/9', augHoursPlayed: 2, augCourtHours: '1.6', augCalories: '792'
             },
             'Dushi': {
                 balance: 'AED 68', totalPaid: 'AED 5,308', totalExpense: 'AED 5,240', delayPay: 'AED 0',
                 negativeWeeks: 0, notPlayedSince: '2', longestStreak: 17, currentStreak: 0,
                 daysPlayed: '47/84', hoursPlayed: 92, hoursLast30: 10, caloriesBurned: '39,486',
-                augDaysPlayed: '5/9', augHoursPlayed: 10, augCourtHours: '9.1', augCalories: '4,608',
-                balanceNum: 68, hoursNum: 92, caloriesNum: 39486
+                augDaysPlayed: '5/9', augHoursPlayed: 10, augCourtHours: '9.1', augCalories: '4,608'
             },
             'Gaurav': {
                 balance: 'AED 7', totalPaid: 'AED 4,031', totalExpense: 'AED 4,024', delayPay: 'AED 0',
                 negativeWeeks: 0, notPlayedSince: '2', longestStreak: 10, currentStreak: 0,
                 daysPlayed: '26/84', hoursPlayed: 52, hoursLast30: 0, caloriesBurned: '21,498',
-                augDaysPlayed: '2/9', augHoursPlayed: 4, augCourtHours: '3.5', augCalories: '1,780',
-                balanceNum: 7, hoursNum: 52, caloriesNum: 21498
+                augDaysPlayed: '2/9', augHoursPlayed: 4, augCourtHours: '3.5', augCalories: '1,780'
             },
             'Vipul': {
                 balance: 'AED 32', totalPaid: 'AED 4,340', totalExpense: 'AED 4,308', delayPay: 'AED 0',
                 negativeWeeks: 0, notPlayedSince: '10', longestStreak: 7, currentStreak: 0,
                 daysPlayed: '33/84', hoursPlayed: 61, hoursLast30: 0, caloriesBurned: '26,433',
-                augDaysPlayed: '0/9', augHoursPlayed: 0, augCourtHours: '0.0', augCalories: '0',
-                balanceNum: 32, hoursNum: 61, caloriesNum: 26433
+                augDaysPlayed: '0/9', augHoursPlayed: 0, augCourtHours: '0.0', augCalories: '0'
             },
             'Mohit': {
                 balance: 'AED 654', totalPaid: 'AED 3,830', totalExpense: 'AED 3,176', delayPay: 'AED 0',
                 negativeWeeks: 0, notPlayedSince: '1', longestStreak: 16, currentStreak: 0,
                 daysPlayed: '48/84', hoursPlayed: 96, hoursLast30: 12, caloriesBurned: '39,786',
-                augDaysPlayed: '6/9', augHoursPlayed: 12, augCourtHours: '10.9', augCalories: '5,346',
-                balanceNum: 654, hoursNum: 96, caloriesNum: 39786
+                augDaysPlayed: '6/9', augHoursPlayed: 12, augCourtHours: '10.9', augCalories: '5,346'
             },
             'Mahadevan': {
                 balance: 'AED (47)', totalPaid: 'AED 3,005', totalExpense: 'AED 3,058', delayPay: 'AED 0',
                 negativeWeeks: 0, notPlayedSince: '-', longestStreak: 16, currentStreak: 12,
                 daysPlayed: '54/84', hoursPlayed: 105, hoursLast30: 18, caloriesBurned: '44,053',
-                augDaysPlayed: '9/9', augHoursPlayed: 18, augCourtHours: '16.1', augCalories: '7,985',
-                balanceNum: -47, hoursNum: 105, caloriesNum: 44053
+                augDaysPlayed: '9/9', augHoursPlayed: 18, augCourtHours: '16.1', augCalories: '7,985'
             },
             'Anuj': {
                 balance: 'AED (208)', totalPaid: 'AED 2,358', totalExpense: 'AED 2,566', delayPay: 'AED 0',
                 negativeWeeks: 5, notPlayedSince: '1', longestStreak: 12, currentStreak: 6,
                 daysPlayed: '26/84', hoursPlayed: 52, hoursLast30: 8, caloriesBurned: '21,850',
-                augDaysPlayed: '4/9', augHoursPlayed: 8, augCourtHours: '7.0', augCalories: '3,532',
-                balanceNum: -208, hoursNum: 52, caloriesNum: 21850
+                augDaysPlayed: '4/9', augHoursPlayed: 8, augCourtHours: '7.0', augCalories: '3,532'
             },
             'Montu': {
                 balance: 'AED 0', totalPaid: 'AED 2,099', totalExpense: 'AED 2,099', delayPay: 'AED 0',
                 negativeWeeks: 0, notPlayedSince: '4', longestStreak: 9, currentStreak: 0,
                 daysPlayed: '4/84', hoursPlayed: 8, hoursLast30: 2, caloriesBurned: '2,136',
-                augDaysPlayed: '1/9', augHoursPlayed: 2, augCourtHours: '1.6', augCalories: '800',
-                balanceNum: 0, hoursNum: 8, caloriesNum: 2136
+                augDaysPlayed: '1/9', augHoursPlayed: 2, augCourtHours: '1.6', augCalories: '800'
             },
             'Shonam': {
                 balance: 'AED 179', totalPaid: 'AED 1,302', totalExpense: 'AED 1,123', delayPay: 'AED 0',
                 negativeWeeks: 0, notPlayedSince: '-', longestStreak: 11, currentStreak: 1,
                 daysPlayed: '23/84', hoursPlayed: 41, hoursLast30: 2, caloriesBurned: '17,316',
-                augDaysPlayed: '1/9', augHoursPlayed: 2, augCourtHours: '1.6', augCalories: '792',
-                balanceNum: 179, hoursNum: 41, caloriesNum: 17316
+                augDaysPlayed: '1/9', augHoursPlayed: 2, augCourtHours: '1.6', augCalories: '792'
             },
             'Sarthak': {
                 balance: 'AED 928', totalPaid: 'AED 1,875', totalExpense: 'AED 947', delayPay: 'AED 0',
                 negativeWeeks: 0, notPlayedSince: '-', longestStreak: 11, currentStreak: 11,
                 daysPlayed: '14/84', hoursPlayed: 28, hoursLast30: 14, caloriesBurned: '12,194',
-                augDaysPlayed: '7/9', augHoursPlayed: 14, augCourtHours: '12.7', augCalories: '6,306',
-                balanceNum: 928, hoursNum: 28, caloriesNum: 12194
+                augDaysPlayed: '7/9', augHoursPlayed: 14, augCourtHours: '12.7', augCalories: '6,306'
             },
             'Upkar Sir': {
                 balance: 'AED (90)', totalPaid: 'AED 552', totalExpense: 'AED 642', delayPay: 'AED 0',
                 negativeWeeks: 4, notPlayedSince: '2', longestStreak: 8, currentStreak: 0,
                 daysPlayed: '4/84', hoursPlayed: 5, hoursLast30: 3, caloriesBurned: '2,204',
-                augDaysPlayed: '3/9', augHoursPlayed: 3, augCourtHours: '2.7', augCalories: '1,354',
-                balanceNum: -90, hoursNum: 5, caloriesNum: 2204
+                augDaysPlayed: '3/9', augHoursPlayed: 3, augCourtHours: '2.7', augCalories: '1,354'
             },
             'Akhil': {
                 balance: 'AED 0', totalPaid: 'AED 213', totalExpense: 'AED 213', delayPay: 'AED 0',
                 negativeWeeks: 0, notPlayedSince: '4', longestStreak: 4, currentStreak: 0,
                 daysPlayed: '4/84', hoursPlayed: 8, hoursLast30: 2, caloriesBurned: '3,397',
-                augDaysPlayed: '1/9', augHoursPlayed: 2, augCourtHours: '2.0', augCalories: '980',
-                balanceNum: 0, hoursNum: 8, caloriesNum: 3397
+                augDaysPlayed: '1/9', augHoursPlayed: 2, augCourtHours: '2.0', augCalories: '980'
             },
             'Saurabh': {
                 balance: 'AED (54)', totalPaid: 'AED -', totalExpense: 'AED 54', delayPay: 'AED 0',
                 negativeWeeks: 2, notPlayedSince: '1', longestStreak: 1, currentStreak: 1,
                 daysPlayed: '1/84', hoursPlayed: 2, hoursLast30: 2, caloriesBurned: '880',
-                augDaysPlayed: '1/9', augHoursPlayed: 2, augCourtHours: '1.8', augCalories: '880',
-                balanceNum: -54, hoursNum: 2, caloriesNum: 880
+                augDaysPlayed: '1/9', augHoursPlayed: 2, augCourtHours: '1.8', augCalories: '880'
             }
         };
 
-        // Populate player dropdowns
-        function populatePlayerDropdowns() {
-            const loginSelect = document.getElementById('playerSelect');
-            const setupSelect = document.getElementById('setupPlayer');
-            
+        // Populate player dropdown
+        function populatePlayerDropdown() {
+            const select = document.getElementById('playerSelect');
             Object.keys(playerData).forEach(player => {
-                const option1 = document.createElement('option');
-                option1.value = player;
-                option1.textContent = player;
-                loginSelect.appendChild(option1);
-                
-                const option2 = document.createElement('option');
-                option2.value = player;
-                option2.textContent = player;
-                setupSelect.appendChild(option2);
+                const option = document.createElement('option');
+                option.value = player;
+                option.textContent = player;
+                select.appendChild(option);
             });
-        }
-
-        // Toggle password setup form
-        function togglePasswordSetup() {
-            const setup = document.getElementById('passwordSetup');
-            setup.style.display = setup.style.display === 'none' ? 'block' : 'none';
-        }
-
-        // Set password for a player
-        function setPassword() {
-            const player = document.getElementById('setupPlayer').value;
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const errorDiv = document.getElementById('error');
-            const successDiv = document.getElementById('success');
-
-            if (!player) {
-                showMessage('Please select a player!', 'error');
-                return;
-            }
-
-            if (newPassword.length < 4) {
-                showMessage('Password must be at least 4 characters!', 'error');
-                return;
-            }
-
-            if (newPassword !== confirmPassword) {
-                showMessage('Passwords do not match!', 'error');
-                return;
-            }
-
-            playerPasswords[player] = newPassword;
-            showMessage(`Password set successfully for ${player}!`, 'success');
-            
-            // Clear form
-            document.getElementById('setupPlayer').value = '';
-            document.getElementById('newPassword').value = '';
-            document.getElementById('confirmPassword').value = '';
-            
-            // Hide setup form after 2 seconds
-            setTimeout(() => {
-                document.getElementById('passwordSetup').style.display = 'none';
-            }, 2000);
-        }
-
-        // Show error or success message
-        function showMessage(message, type) {
-            const errorDiv = document.getElementById('error');
-            const successDiv = document.getElementById('success');
-            
-            if (type === 'error') {
-                errorDiv.textContent = message;
-                errorDiv.style.display = 'block';
-                successDiv.style.display = 'none';
-            } else {
-                successDiv.textContent = message;
-                successDiv.style.display = 'block';
-                errorDiv.style.display = 'none';
-            }
         }
 
         // Login function
@@ -692,17 +494,15 @@
             event.preventDefault();
             const player = document.getElementById('playerSelect').value;
             const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('error');
 
-            if (!player) {
-                showMessage('Please select a player!', 'error');
+            if (password !== 'badminton123') {
+                errorDiv.textContent = 'Invalid password!';
                 return;
             }
 
-            // Check if player has set a custom password
-            const expectedPassword = playerPasswords[player] || 'badminton123';
-            
-            if (password !== expectedPassword) {
-                showMessage('Invalid password!', 'error');
+            if (!player) {
+                errorDiv.textContent = 'Please select a player!';
                 return;
             }
 
@@ -712,131 +512,6 @@
 
             // Populate dashboard
             populateDashboard(player);
-        }
-
-        // Create charts
-        function createCharts(playerName) {
-            const data = playerData[playerName];
-            
-            // Activity Trends Chart
-            const activityCtx = document.getElementById('activityChart').getContext('2d');
-            new Chart(activityCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-                    datasets: [{
-                        label: 'Hours Played',
-                        data: [15, 18, 22, 16, 20, 18, 16, data.augHoursPlayed],
-                        borderColor: '#667eea',
-                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                        tension: 0.4,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-
-            // Balance Chart
-            const balanceCtx = document.getElementById('balanceChart').getContext('2d');
-            new Chart(balanceCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Balance', 'Expenses'],
-                    datasets: [{
-                        data: [Math.abs(data.balanceNum), parseInt(data.totalExpense.replace(/[^\d]/g, ''))],
-                        backgroundColor: [
-                            data.balanceNum >= 0 ? '#27ae60' : '#e74c3c',
-                            '#3498db'
-                        ]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
-            });
-
-            // Calories Chart
-            const caloriesCtx = document.getElementById('caloriesChart').getContext('2d');
-            new Chart(caloriesCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['Total 2025', 'August 2025', 'Last 30 Days Target'],
-                    datasets: [{
-                        label: 'Calories',
-                        data: [
-                            data.caloriesNum,
-                            parseInt(data.augCalories.replace(/[^\d]/g, '')),
-                            data.hoursLast30 * 450
-                        ],
-                        backgroundColor: [
-                            '#e74c3c',
-                            '#f39c12',
-                            '#95a5a6'
-                        ]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-
-            // Hours Distribution Chart
-            const hoursCtx = document.getElementById('hoursChart').getContext('2d');
-            new Chart(hoursCtx, {
-                type: 'pie',
-                data: {
-                    labels: ['August Hours', 'Rest of Year'],
-                    datasets: [{
-                        data: [
-                            data.augHoursPlayed,
-                            data.hoursNum - data.augHoursPlayed
-                        ],
-                        backgroundColor: [
-                            '#667eea',
-                            '#764ba2'
-                        ]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
-            });
         }
 
         // Populate dashboard with player data
@@ -873,11 +548,8 @@
             document.getElementById('augCalories').textContent = data.augCalories;
 
             // Performance bar
-            const hoursProgress = Math.min((data.hoursNum / 150) * 100, 100);
+            const hoursProgress = Math.min((data.hoursPlayed / 150) * 100, 100);
             document.getElementById('performanceBar').style.width = hoursProgress + '%';
-
-            // Create charts
-            createCharts(playerName);
         }
 
         // Logout function
@@ -886,13 +558,12 @@
             document.getElementById('dashboard').style.display = 'none';
             document.getElementById('playerSelect').value = '';
             document.getElementById('password').value = '';
-            document.getElementById('error').style.display = 'none';
-            document.getElementById('success').style.display = 'none';
+            document.getElementById('error').textContent = '';
         }
 
         // Initialize the app
         document.addEventListener('DOMContentLoaded', function() {
-            populatePlayerDropdowns();
+            populatePlayerDropdown();
         });
     </script>
 </body>
