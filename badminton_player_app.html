@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Badminton Player Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .login-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 400px;
+            margin: 100px auto;
+            text-align: center;
+        }
+        
+        .dashboard {
+            display: none;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .player-name {
+            font-size: 2.5em;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .last-updated {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-label {
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .stat-value {
+            font-weight: bold;
+        }
+        
+        .positive {
+            color: #27ae60;
+        }
+        
+        .negative {
+            color: #e74c3c;
+        }
+        
+        .neutral {
+            color: #3498db;
+        }
+        
+        .login-form {
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        select, input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        select:focus, input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .login-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+            width: 100%;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+        
+        .error {
+            color: #e74c3c;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .activity-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+        
+        .active {
+            background-color: #27ae60;
+        }
+        
+        .inactive {
+            background-color: #e74c3c;
+        }
+        
+        .moderate {
+            background-color: #f39c12;
+        }
+
+        .performance-bar {
+            background: #f0f0f0;
+            border-radius: 10px;
+            height: 8px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .performance-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .player-name {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Screen -->
+        <div id="login" class="login-container">
+            <h1 style="color: #667eea; margin-bottom: 30px;">🏸 Player Login</h1>
+            <form class="login-form" onsubmit="login(event)">
+                <div class="form-group">
+                    <label for="playerSelect">Select Player:</label>
+                    <select id="playerSelect" required>
+                        <option value="">Choose your name...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" placeholder="Enter password" required>
+                </div>
+                <button type="submit" class="login-btn">Login</button>
+                <div id="error" class="error"></div>
+            </form>
+            <p style="color: #666; font-size: 12px; margin-top: 20px;">
+                Default password: "badminton123"
+            </p>
+        </div>
+
+        <!-- Dashboard Screen -->
+        <div id="dashboard" class="dashboard">
+            <div class="header">
+                <h1 class="player-name" id="playerName"></h1>
+                <p class="last-updated">Last Updated: August 30, 2025</p>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+
+            <div class="stats-grid">
+                <!-- Financial Overview -->
+                <div class="stat-card">
+                    <h3>💰 Financial Overview</h3>
+                    <div class="stat-row">
+                        <span class="stat-label">Current Balance:</span>
+                        <span class="stat-value" id="balance"></span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Total Paid:</span>
+                        <span class="stat-value neutral" id="totalPaid"></span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Total Expense:</span>
+                        <span class="stat-value neutral" id="totalExpense"></span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Delay/Pay Status:</span>
+                        <span class="stat-value" id="delayPay"></span>
+                    </div>
+                </div>
+
+                <!-- Activity Status -->
+                <div class="stat-card">
+                    <h3>📊 Activity Status</h3>
+                    <div class="stat-row">
+                        <span class="stat-label">Negative Balance Weeks:</span>
+                        <span class="stat-value" id="negativeWeeks"></span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Not Played Since:</span>
+                        <span class="stat-value" id="notPlayedSince"></span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Longest Weekly Streak:</span>
+                        <span class="stat-value positive" id="longestStreak"></span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Current Weekly Streak:</span>
+                        <span class="stat-value" id="currentStreak"></span>
+                    </div>
+                </div>
+
+                <!-- Performance Stats 2025 -->
+                <div class="stat-card">
+                    <h3>🏸 2025 Performance</h3>
+                    <div class="stat-row">
+                        <span class="stat-label">Days Played:</span>
+                        <span class="stat-value positive" id="daysPlayed"></span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Total Hours:</span>
+                        <span class="stat-value positive" id="hoursPlayed"></span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Hours (Last 30 days):</span>
+                        <span class="stat-value neutral" id="hoursLast30"></span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Calories Burned:</span>
+                        <span class="stat-value positive" id="caloriesBurned"></span>
+                    </div>
+                    <div class="performance-bar">
+                        <div class="performance-fill" id="performanceBar" style="background: linear-gradient(90deg, #27ae60, #2ecc71);"></div>
+                    </div>
+                </div>
+
+                <!-- August 2025 Stats -->
+                <div class="stat-card">
+                    <h3>📅 August 2025</h3>
+                    <div class="stat-row">
+                        <span class="stat-label">Days Played:</span>
+                        <span class="stat-value positive" id="augDaysPlayed"></span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Hours Played:</span>
+                        <span class="stat-value positive" id="augHoursPlayed"></span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Court Hours:</span>
+                        <span class="stat-value neutral" id="augCourtHours"></span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Calories:</span>
+                        <span class="stat-value positive" id="augCalories"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Player data based on your Excel sheets
+        const playerData = {
+            'Tanvir': {
+                balance: 'AED 280', totalPaid: 'AED 10,788', totalExpense: 'AED 10,508', delayPay: 'AED 0',
+                negativeWeeks: 0, notPlayedSince: '-', longestStreak: 32, currentStreak: 32,
+                daysPlayed: '76/84', hoursPlayed: 147, hoursLast30: 18, caloriesBurned: '63,944',
+                augDaysPlayed: '9/9', augHoursPlayed: 18, augCourtHours: '16.1', augCalories: '8,194'
+            },
+            'Abhishek': {
+                balance: 'AED 83', totalPaid: 'AED 10,868', totalExpense: 'AED 10,786', delayPay: 'AED 0',
+                negativeWeeks: 0, notPlayedSince: '-', longestStreak: 26, currentStreak: 1,
+                daysPlayed: '65/84', hoursPlayed: 125, hoursLast30: 10, caloriesBurned: '51,673',
+                augDaysPlayed: '5/9', augHoursPlayed: 10, augCourtHours: '9.0', augCalories: '4,377'
+            },
+            'Sumesh': {
+                balance: 'AED (41)', totalPaid: 'AED 9,964', totalExpense: 'AED 10,005', delayPay: 'AED 0',
+                negativeWeeks: 7, notPlayedSince: '-', longestStreak: 28, currentStreak: 10,
+                daysPlayed: '58/84', hoursPlayed: 115, hoursLast30: 18, caloriesBurned: '49,228',
+                augDaysPlayed: '9/9', augHoursPlayed: 18, augCourtHours: '16.1', augCalories: '8,081'
+            },
+            'Varun': {
+                balance: 'AED (99)', totalPaid: 'AED 10,210', totalExpense: 'AED 10,309', delayPay: 'AED 0',
+                negativeWeeks: 4, notPlayedSince: '3', longestStreak: 18, currentStreak: 0,
+                daysPlayed: '66/84', hoursPlayed: 125, hoursLast30: 4, caloriesBurned: '53,042',
+                augDaysPlayed: '2/9', augHoursPlayed: 4, augCourtHours: '3.6', augCalories: '1,512'
+            },
+            'Sanjeev': {
+                balance: 'AED 290', totalPaid: 'AED 8,979', totalExpense: 'AED 8,689', delayPay: 'AED 0',
+                negativeWeeks: 0, notPlayedSince: '-', longestStreak: 14, currentStreak: 4,
+                daysPlayed: '53/84', hoursPlayed: 106, hoursLast30: 12, caloriesBurned: '44,684',
+                augDaysPlayed: '6/9', augHoursPlayed: 12, augCourtHours: '10.5', augCalories: '5,273'
+            },
+            'Ritesh': {
+                balance: 'AED (48)', totalPaid: 'AED 8,619', totalExpense: 'AED 8,667', delayPay: 'AED 0',
+                negativeWeeks: 1, notPlayedSince: '-', longestStreak: 35, currentStreak: 5,
+                daysPlayed: '59/84', hoursPlayed: 118, hoursLast30: 18, caloriesBurned: '50,666',
+                augDaysPlayed: '9/9', augHoursPlayed: 18, augCourtHours: '16.1', augCalories: '8,145'
+            },
+            'Satish': {
+                balance: 'AED 393', totalPaid: 'AED 8,429', totalExpense: 'AED 8,036', delayPay: 'AED 0',
+                negativeWeeks: 0, notPlayedSince: '-', longestStreak: 14, currentStreak: 5,
+                daysPlayed: '64/84', hoursPlayed: 122, hoursLast30: 18, caloriesBurned: '51,453',
+                augDaysPlayed: '9/9', augHoursPlayed: 18, augCourtHours: '16.1', augCalories: '7,969'
+            },
+            'Harsh': {
+                balance: 'AED (34)', totalPaid: 'AED 5,975', totalExpense: 'AED 6,009', delayPay: 'AED 0',
+                negativeWeeks: 1, notPlayedSince: '-', longestStreak: 14, currentStreak: 1,
+                daysPlayed: '40/84', hoursPlayed: 72, hoursLast30: 2, caloriesBurned: '30,327',
+                augDaysPlayed: '1/9', augHoursPlayed: 2, augCourtHours: '1.6', augCalories: '792'
+            },
+            'Dushi': {
+                balance: 'AED 68', totalPaid: 'AED 5,308', totalExpense: 'AED 5,240', delayPay: 'AED 0',
+                negativeWeeks: 0, notPlayedSince: '2', longestStreak: 17, currentStreak: 0,
+                daysPlayed: '47/84', hoursPlayed: 92, hoursLast30: 10, caloriesBurned: '39,486',
+                augDaysPlayed: '5/9', augHoursPlayed: 10, augCourtHours: '9.1', augCalories: '4,608'
+            },
+            'Gaurav': {
+                balance: 'AED 7', totalPaid: 'AED 4,031', totalExpense: 'AED 4,024', delayPay: 'AED 0',
+                negativeWeeks: 0, notPlayedSince: '2', longestStreak: 10, currentStreak: 0,
+                daysPlayed: '26/84', hoursPlayed: 52, hoursLast30: 0, caloriesBurned: '21,498',
+                augDaysPlayed: '2/9', augHoursPlayed: 4, augCourtHours: '3.5', augCalories: '1,780'
+            },
+            'Vipul': {
+                balance: 'AED 32', totalPaid: 'AED 4,340', totalExpense: 'AED 4,308', delayPay: 'AED 0',
+                negativeWeeks: 0, notPlayedSince: '10', longestStreak: 7, currentStreak: 0,
+                daysPlayed: '33/84', hoursPlayed: 61, hoursLast30: 0, caloriesBurned: '26,433',
+                augDaysPlayed: '0/9', augHoursPlayed: 0, augCourtHours: '0.0', augCalories: '0'
+            },
+            'Mohit': {
+                balance: 'AED 654', totalPaid: 'AED 3,830', totalExpense: 'AED 3,176', delayPay: 'AED 0',
+                negativeWeeks: 0, notPlayedSince: '1', longestStreak: 16, currentStreak: 0,
+                daysPlayed: '48/84', hoursPlayed: 96, hoursLast30: 12, caloriesBurned: '39,786',
+                augDaysPlayed: '6/9', augHoursPlayed: 12, augCourtHours: '10.9', augCalories: '5,346'
+            },
+            'Mahadevan': {
+                balance: 'AED (47)', totalPaid: 'AED 3,005', totalExpense: 'AED 3,058', delayPay: 'AED 0',
+                negativeWeeks: 0, notPlayedSince: '-', longestStreak: 16, currentStreak: 12,
+                daysPlayed: '54/84', hoursPlayed: 105, hoursLast30: 18, caloriesBurned: '44,053',
+                augDaysPlayed: '9/9', augHoursPlayed: 18, augCourtHours: '16.1', augCalories: '7,985'
+            },
+            'Anuj': {
+                balance: 'AED (208)', totalPaid: 'AED 2,358', totalExpense: 'AED 2,566', delayPay: 'AED 0',
+                negativeWeeks: 5, notPlayedSince: '1', longestStreak: 12, currentStreak: 6,
+                daysPlayed: '26/84', hoursPlayed: 52, hoursLast30: 8, caloriesBurned: '21,850',
+                augDaysPlayed: '4/9', augHoursPlayed: 8, augCourtHours: '7.0', augCalories: '3,532'
+            },
+            'Montu': {
+                balance: 'AED 0', totalPaid: 'AED 2,099', totalExpense: 'AED 2,099', delayPay: 'AED 0',
+                negativeWeeks: 0, notPlayedSince: '4', longestStreak: 9, currentStreak: 0,
+                daysPlayed: '4/84', hoursPlayed: 8, hoursLast30: 2, caloriesBurned: '2,136',
+                augDaysPlayed: '1/9', augHoursPlayed: 2, augCourtHours: '1.6', augCalories: '800'
+            },
+            'Shonam': {
+                balance: 'AED 179', totalPaid: 'AED 1,302', totalExpense: 'AED 1,123', delayPay: 'AED 0',
+                negativeWeeks: 0, notPlayedSince: '-', longestStreak: 11, currentStreak: 1,
+                daysPlayed: '23/84', hoursPlayed: 41, hoursLast30: 2, caloriesBurned: '17,316',
+                augDaysPlayed: '1/9', augHoursPlayed: 2, augCourtHours: '1.6', augCalories: '792'
+            },
+            'Sarthak': {
+                balance: 'AED 928', totalPaid: 'AED 1,875', totalExpense: 'AED 947', delayPay: 'AED 0',
+                negativeWeeks: 0, notPlayedSince: '-', longestStreak: 11, currentStreak: 11,
+                daysPlayed: '14/84', hoursPlayed: 28, hoursLast30: 14, caloriesBurned: '12,194',
+                augDaysPlayed: '7/9', augHoursPlayed: 14, augCourtHours: '12.7', augCalories: '6,306'
+            },
+            'Upkar Sir': {
+                balance: 'AED (90)', totalPaid: 'AED 552', totalExpense: 'AED 642', delayPay: 'AED 0',
+                negativeWeeks: 4, notPlayedSince: '2', longestStreak: 8, currentStreak: 0,
+                daysPlayed: '4/84', hoursPlayed: 5, hoursLast30: 3, caloriesBurned: '2,204',
+                augDaysPlayed: '3/9', augHoursPlayed: 3, augCourtHours: '2.7', augCalories: '1,354'
+            },
+            'Akhil': {
+                balance: 'AED 0', totalPaid: 'AED 213', totalExpense: 'AED 213', delayPay: 'AED 0',
+                negativeWeeks: 0, notPlayedSince: '4', longestStreak: 4, currentStreak: 0,
+                daysPlayed: '4/84', hoursPlayed: 8, hoursLast30: 2, caloriesBurned: '3,397',
+                augDaysPlayed: '1/9', augHoursPlayed: 2, augCourtHours: '2.0', augCalories: '980'
+            },
+            'Saurabh': {
+                balance: 'AED (54)', totalPaid: 'AED -', totalExpense: 'AED 54', delayPay: 'AED 0',
+                negativeWeeks: 2, notPlayedSince: '1', longestStreak: 1, currentStreak: 1,
+                daysPlayed: '1/84', hoursPlayed: 2, hoursLast30: 2, caloriesBurned: '880',
+                augDaysPlayed: '1/9', augHoursPlayed: 2, augCourtHours: '1.8', augCalories: '880'
+            }
+        };
+
+        // Populate player dropdown
+        function populatePlayerDropdown() {
+            const select = document.getElementById('playerSelect');
+            Object.keys(playerData).forEach(player => {
+                const option = document.createElement('option');
+                option.value = player;
+                option.textContent = player;
+                select.appendChild(option);
+            });
+        }
+
+        // Login function
+        function login(event) {
+            event.preventDefault();
+            const player = document.getElementById('playerSelect').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('error');
+
+            if (password !== 'badminton123') {
+                errorDiv.textContent = 'Invalid password!';
+                return;
+            }
+
+            if (!player) {
+                errorDiv.textContent = 'Please select a player!';
+                return;
+            }
+
+            // Hide login and show dashboard
+            document.getElementById('login').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+
+            // Populate dashboard
+            populateDashboard(player);
+        }
+
+        // Populate dashboard with player data
+        function populateDashboard(playerName) {
+            const data = playerData[playerName];
+            
+            document.getElementById('playerName').textContent = playerName;
+            
+            // Financial data
+            document.getElementById('balance').textContent = data.balance;
+            document.getElementById('balance').className = data.balance.includes('(') ? 'stat-value negative' : 'stat-value positive';
+            document.getElementById('totalPaid').textContent = data.totalPaid;
+            document.getElementById('totalExpense').textContent = data.totalExpense;
+            document.getElementById('delayPay').textContent = data.delayPay;
+            
+            // Activity data
+            document.getElementById('negativeWeeks').textContent = data.negativeWeeks;
+            document.getElementById('negativeWeeks').className = data.negativeWeeks > 0 ? 'stat-value negative' : 'stat-value positive';
+            document.getElementById('notPlayedSince').textContent = data.notPlayedSince === '-' ? 'Active' : data.notPlayedSince + ' weeks';
+            document.getElementById('longestStreak').textContent = data.longestStreak + ' weeks';
+            document.getElementById('currentStreak').textContent = data.currentStreak + ' weeks';
+            document.getElementById('currentStreak').className = data.currentStreak > 0 ? 'stat-value positive' : 'stat-value negative';
+            
+            // Performance data
+            document.getElementById('daysPlayed').textContent = data.daysPlayed;
+            document.getElementById('hoursPlayed').textContent = data.hoursPlayed + ' hrs';
+            document.getElementById('hoursLast30').textContent = data.hoursLast30 + ' hrs';
+            document.getElementById('caloriesBurned').textContent = data.caloriesBurned;
+            
+            // August data
+            document.getElementById('augDaysPlayed').textContent = data.augDaysPlayed;
+            document.getElementById('augHoursPlayed').textContent = data.augHoursPlayed + ' hrs';
+            document.getElementById('augCourtHours').textContent = data.augCourtHours + ' hrs';
+            document.getElementById('augCalories').textContent = data.augCalories;
+
+            // Performance bar
+            const hoursProgress = Math.min((data.hoursPlayed / 150) * 100, 100);
+            document.getElementById('performanceBar').style.width = hoursProgress + '%';
+        }
+
+        // Logout function
+        function logout() {
+            document.getElementById('login').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('playerSelect').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('error').textContent = '';
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            populatePlayerDropdown();
+        });
+    </script>
+</body>
+</html>
