@@ -257,7 +257,7 @@
         <div id="dashboard" class="dashboard">
             <div class="header">
                 <h1 class="player-name" id="playerName"></h1>
-                <p class="last-updated">Last Updated: August 31, 2025</p>
+                <p class="last-updated">Last Updated: September 05, 2025</p>
                 <button class="logout-btn" onclick="logout()">Logout</button>
                 <button class="login-btn" onclick="showChangePasswordModal()" style="margin-top: 10px; width: auto;">Change Password</button>
             </div>
@@ -329,24 +329,24 @@
                     </div>
                 </div>
 
-                <!-- August 2025 Stats -->
+                <!-- September 2025 Stats -->
                 <div class="stat-card">
-                    <h3>📅 August 2025</h3>
+                    <h3>📅 September 2025</h3>
                     <div class="stat-row">
                         <span class="stat-label">Days Played:</span>
-                        <span class="stat-value positive" id="augDaysPlayed"></span>
+                        <span class="stat-value positive" id="sepDaysPlayed"></span>
                     </div>
                     <div class="stat-row">
                         <span class="stat-label">Hours Played:</span>
-                        <span class="stat-value positive" id="augHoursPlayed"></span>
+                        <span class="stat-value positive" id="sepHoursPlayed"></span>
                     </div>
                     <div class="stat-row">
                         <span class="stat-label">Court Hours:</span>
-                        <span class="stat-value neutral" id="augCourtHours"></span>
+                        <span class="stat-value neutral" id="sepCourtHours"></span>
                     </div>
                     <div class="stat-row">
                         <span class="stat-label">Calories:</span>
-                        <span class="stat-value positive" id="augCalories"></span>
+                        <span class="stat-value positive" id="sepCalories"></span>
                     </div>
                 </div>
             </div>
@@ -509,124 +509,124 @@
 
         const playerData = {
             'Tanvir': {
-                balance: 'AED 209', totalPaid: 'AED 10,788', totalExpense: 'AED 10,580', delayPay: 'AED 0',
-                negativeWeeks: 0, notPlayedSince: '-', longestStreak: 32, currentStreak: 32,
-                daysPlayed: '77/85', hoursPlayed: 149, hoursLast30: 6, caloriesBurned: '64,964',
-                augDaysPlayed: '10/10', augHoursPlayed: 20, augCourtHours: '18.1', augCalories: '9,214'
+                balance: 'AED 146', totalPaid: 'AED 10,788', totalExpense: 'AED 10,643', delayPay: 'AED 0',
+                negativeWeeks: 0, notPlayedSince: '-', longestStreak: 33, currentStreak: 33,
+                daysPlayed: '78/86', hoursPlayed: 151, hoursLast30: 18, caloriesBurned: '65,780',
+                sepDaysPlayed: '1/1', sepHoursPlayed: 2, sepCourtHours: '1.6', sepCalories: '816'
             },
             'Abhishek': {
-                balance: 'AED 11', totalPaid: 'AED 10,868', totalExpense: 'AED 10,857', delayPay: 'AED 0',
-                negativeWeeks: 0, notPlayedSince: '-', longestStreak: 26, currentStreak: 1,
-                daysPlayed: '66/85', hoursPlayed: 127, hoursLast30: 12, caloriesBurned: '52,647',
-                augDaysPlayed: '6/10', augHoursPlayed: 12, augCourtHours: '11.0', augCalories: '5,351'
+                balance: 'AED (115)', totalPaid: 'AED 10,805', totalExpense: 'AED 10,920', delayPay: 'AED 0',
+                negativeWeeks: 1, notPlayedSince: '-', longestStreak: 26, currentStreak: 2,
+                daysPlayed: '67/86', hoursPlayed: 129, hoursLast30: 10, caloriesBurned: '53,426',
+                sepDaysPlayed: '1/1', sepHoursPlayed: 2, sepCourtHours: '1.6', sepCalories: '779'
             },
             'Sumesh': {
-                balance: 'AED (3)', totalPaid: 'AED 10,074', totalExpense: 'AED 10,077', delayPay: 'AED 0',
-                negativeWeeks: 7, notPlayedSince: '-', longestStreak: 28, currentStreak: 10,
-                daysPlayed: '59/85', hoursPlayed: 117, hoursLast30: 20, caloriesBurned: '50,234',
-                augDaysPlayed: '10/10', augHoursPlayed: 20, augCourtHours: '18.1', augCalories: '9,087'
+                balance: 'AED 34', totalPaid: 'AED 10,174', totalExpense: 'AED 10,140', delayPay: 'AED 0',
+                negativeWeeks: 0, notPlayedSince: '-', longestStreak: 28, currentStreak: 11,
+                daysPlayed: '60/86', hoursPlayed: 119, hoursLast30: 18, caloriesBurned: '51,039',
+                sepDaysPlayed: '1/1', sepHoursPlayed: 2, sepCourtHours: '1.6', sepCalories: '805'
             },
             'Varun': {
-                balance: 'AED (99)', totalPaid: 'AED 10,210', totalExpense: 'AED 10,309', delayPay: 'AED 0',
-                negativeWeeks: 4, notPlayedSince: '3', longestStreak: 18, currentStreak: 0,
-                daysPlayed: '66/85', hoursPlayed: 125, hoursLast30: 4, caloriesBurned: '53,042',
-                augDaysPlayed: '2/10', augHoursPlayed: 4, augCourtHours: '3.8', augCalories: '1,912'
+                balance: 'AED 98', totalPaid: 'AED 10,470', totalExpense: 'AED 10,372', delayPay: 'AED 0',
+                negativeWeeks: 0, notPlayedSince: '-', longestStreak: 18, currentStreak: 1,
+                daysPlayed: '67/86', hoursPlayed: 127, hoursLast30: 6, caloriesBurned: '53,850',
+                sepDaysPlayed: '1/1', sepHoursPlayed: 2, sepCourtHours: '1.6', sepCalories: '808'
             },
             'Sanjeev': {
-                balance: 'AED 218', totalPaid: 'AED 8,979', totalExpense: 'AED 8,761', delayPay: 'AED 0',
-                negativeWeeks: 0, notPlayedSince: '-', longestStreak: 14, currentStreak: 4,
-                daysPlayed: '54/85', hoursPlayed: 108, hoursLast30: 14, caloriesBurned: '45,684',
-                augDaysPlayed: '7/10', augHoursPlayed: 14, augCourtHours: '12.5', augCalories: '6,273'
+                balance: 'AED 155', totalPaid: 'AED 8,979', totalExpense: 'AED 8,824', delayPay: 'AED 0',
+                negativeWeeks: 0, notPlayedSince: '-', longestStreak: 14, currentStreak: 5,
+                daysPlayed: '55/86', hoursPlayed: 110, hoursLast30: 16, caloriesBurned: '46,484',
+                sepDaysPlayed: '1/1', sepHoursPlayed: 2, sepCourtHours: '1.6', sepCalories: '800'
             },
             'Ritesh': {
-                balance: 'AED (191)', totalPaid: 'AED 8,619', totalExpense: 'AED 8,810', delayPay: 'AED 0',
-                negativeWeeks: 1, notPlayedSince: '-', longestStreak: 35, currentStreak: 5,
-                daysPlayed: '60/85', hoursPlayed: 120, hoursLast30: 20, caloriesBurned: '51,680',
-                augDaysPlayed: '10/10', augHoursPlayed: 20, augCourtHours: '18.1', augCalories: '9,159'
+                balance: 'AED (254)', totalPaid: 'AED 8,619', totalExpense: 'AED 8,873', delayPay: 'AED 0',
+                negativeWeeks: 2, notPlayedSince: '-', longestStreak: 35, currentStreak: 6,
+                daysPlayed: '61/86', hoursPlayed: 122, hoursLast30: 18, caloriesBurned: '52,492',
+                sepDaysPlayed: '1/1', sepHoursPlayed: 2, sepCourtHours: '1.6', sepCalories: '811'
             },
             'Satish': {
-                balance: 'AED 321', totalPaid: 'AED 8,429', totalExpense: 'AED 8,108', delayPay: 'AED 0',
-                negativeWeeks: 0, notPlayedSince: '-', longestStreak: 14, currentStreak: 5,
-                daysPlayed: '65/85', hoursPlayed: 124, hoursLast30: 20, caloriesBurned: '52,445',
-                augDaysPlayed: '10/10', augHoursPlayed: 20, augCourtHours: '18.1', augCalories: '8,961'
+                balance: 'AED 258', totalPaid: 'AED 8,429', totalExpense: 'AED 8,171', delayPay: 'AED 0',
+                negativeWeeks: 0, notPlayedSince: '-', longestStreak: 14, currentStreak: 6,
+                daysPlayed: '66/86', hoursPlayed: 126, hoursLast30: 18, caloriesBurned: '53,239',
+                sepDaysPlayed: '1/1', sepHoursPlayed: 2, sepCourtHours: '1.6', sepCalories: '794'
             },
             'Harsh': {
                 balance: 'AED (34)', totalPaid: 'AED 5,975', totalExpense: 'AED 6,009', delayPay: 'AED 0',
-                negativeWeeks: 1, notPlayedSince: '-', longestStreak: 14, currentStreak: 1,
-                daysPlayed: '40/85', hoursPlayed: 72, hoursLast30: 2, caloriesBurned: '30,327',
-                augDaysPlayed: '1/10', augHoursPlayed: 2, augCourtHours: '1.6', augCalories: '792'
+                negativeWeeks: 2, notPlayedSince: '1', longestStreak: 14, currentStreak: 1,
+                daysPlayed: '40/86', hoursPlayed: 72, hoursLast30: 2, caloriesBurned: '30,327',
+                sepDaysPlayed: '0/1', sepHoursPlayed: 0, sepCourtHours: '0.0', sepCalories: '0'
             },
             'Dushi': {
                 balance: 'AED 68', totalPaid: 'AED 5,308', totalExpense: 'AED 5,240', delayPay: 'AED 0',
-                negativeWeeks: 0, notPlayedSince: '2', longestStreak: 17, currentStreak: 0,
-                daysPlayed: '47/85', hoursPlayed: 92, hoursLast30: 10, caloriesBurned: '39,486',
-                augDaysPlayed: '5/10', augHoursPlayed: 10, augCourtHours: '9.1', augCalories: '4,608'
+                negativeWeeks: 0, notPlayedSince: '3', longestStreak: 17, currentStreak: 0,
+                daysPlayed: '47/86', hoursPlayed: 92, hoursLast30: 8, caloriesBurned: '39,486',
+                sepDaysPlayed: '0/1', sepHoursPlayed: 0, sepCourtHours: '0.0', sepCalories: '0'
             },
             'Gaurav': {
                 balance: 'AED 7', totalPaid: 'AED 4,031', totalExpense: 'AED 4,024', delayPay: 'AED 0',
-                negativeWeeks: 0, notPlayedSince: '2', longestStreak: 10, currentStreak: 0,
-                daysPlayed: '26/85', hoursPlayed: 52, hoursLast30: 4, caloriesBurned: '21,898',
-                augDaysPlayed: '2/10', augHoursPlayed: 4, augCourtHours: '3.5', augCalories: '1,780'
+                negativeWeeks: 0, notPlayedSince: '3', longestStreak: 10, currentStreak: 0,
+                daysPlayed: '26/86', hoursPlayed: 52, hoursLast30: 2, caloriesBurned: '22,188',
+                sepDaysPlayed: '0/1', sepHoursPlayed: 0, sepCourtHours: '0.0', sepCalories: '0'
             },
             'Vipul': {
                 balance: 'AED 32', totalPaid: 'AED 4,340', totalExpense: 'AED 4,308', delayPay: 'AED 0',
-                negativeWeeks: 0, notPlayedSince: '10', longestStreak: 7, currentStreak: 0,
-                daysPlayed: '33/85', hoursPlayed: 61, hoursLast30: 0, caloriesBurned: '26,433',
-                augDaysPlayed: '0/10', augHoursPlayed: 0, augCourtHours: '0.0', augCalories: '0'
+                negativeWeeks: 0, notPlayedSince: '11', longestStreak: 7, currentStreak: 0,
+                daysPlayed: '33/86', hoursPlayed: 61, hoursLast30: 0, caloriesBurned: '24,633',
+                sepDaysPlayed: '0/1', sepHoursPlayed: 0, sepCourtHours: '0.0', sepCalories: '0'
             },
             'Mohit': {
                 balance: 'AED 654', totalPaid: 'AED 3,830', totalExpense: 'AED 3,176', delayPay: 'AED 0',
-                negativeWeeks: 0, notPlayedSince: '1', longestStreak: 16, currentStreak: 0,
-                daysPlayed: '48/85', hoursPlayed: 96, hoursLast30: 12, caloriesBurned: '39,786',
-                augDaysPlayed: '6/10', augHoursPlayed: 12, augCourtHours: '10.9', augCalories: '5,346'
+                negativeWeeks: 0, notPlayedSince: '2', longestStreak: 11, currentStreak: 0,
+                daysPlayed: '48/86', hoursPlayed: 96, hoursLast30: 8, caloriesBurned: '39,786',
+                sepDaysPlayed: '0/1', sepHoursPlayed: 0, sepCourtHours: '0.0', sepCalories: '0'
             },
             'Mahadevan': {
-                balance: 'AED (20)', totalPaid: 'AED 3,065', totalExpense: 'AED 3,085', delayPay: 'AED 0',
-                negativeWeeks: 1, notPlayedSince: '-', longestStreak: 16, currentStreak: 12,
-                daysPlayed: '55/85', hoursPlayed: 107, hoursLast30: 20, caloriesBurned: '45,047',
-                augDaysPlayed: '10/10', augHoursPlayed: 20, augCourtHours: '18.1', augCalories: '8,979'
+                balance: 'AED (24)', totalPaid: 'AED 3,005', totalExpense: 'AED 3,029', delayPay: 'AED 0',
+                negativeWeeks: 2, notPlayedSince: '1', longestStreak: 16, currentStreak: 12,
+                daysPlayed: '55/86', hoursPlayed: 107, hoursLast30: 16, caloriesBurned: '45,047',
+                sepDaysPlayed: '0/1', sepHoursPlayed: 0, sepCourtHours: '0.0', sepCalories: '0'
             },
             'Anuj': {
                 balance: 'AED 111', totalPaid: 'AED 2,748', totalExpense: 'AED 2,637', delayPay: 'AED 0',
                 negativeWeeks: 0, notPlayedSince: '1', longestStreak: 12, currentStreak: 7,
-                daysPlayed: '27/85', hoursPlayed: 54, hoursLast30: 10, caloriesBurned: '22,806',
-                augDaysPlayed: '5/10', augHoursPlayed: 10, augCourtHours: '9.0', augCalories: '4,538'
+                daysPlayed: '27/86', hoursPlayed: 54, hoursLast30: 8, caloriesBurned: '22,856',
+                sepDaysPlayed: '0/1', sepHoursPlayed: 0, sepCourtHours: '0.0', sepCalories: '0'
             },
             'Montu': {
                 balance: 'AED 0', totalPaid: 'AED 2,099', totalExpense: 'AED 2,099', delayPay: 'AED 0',
-                negativeWeeks: 0, notPlayedSince: '4', longestStreak: 9, currentStreak: 0,
-                daysPlayed: '4/85', hoursPlayed: 8, hoursLast30: 2, caloriesBurned: '2,136',
-                augDaysPlayed: '1/10', augHoursPlayed: 2, augCourtHours: '1.6', augCalories: '800'
+                negativeWeeks: 0, notPlayedSince: '5', longestStreak: 9, currentStreak: 0,
+                daysPlayed: '4/86', hoursPlayed: 5, hoursLast30: 0, caloriesBurned: '2,136',
+                sepDaysPlayed: '0/1', sepHoursPlayed: 0, sepCourtHours: '0.0', sepCalories: '0'
             },
             'Shonam': {
-                balance: 'AED 107', totalPaid: 'AED 1,302', totalExpense: 'AED 1,195', delayPay: 'AED 0',
-                negativeWeeks: 0, notPlayedSince: '-', longestStreak: 11, currentStreak: 1,
-                daysPlayed: '24/85', hoursPlayed: 43, hoursLast30: 4, caloriesBurned: '18,306',
-                augDaysPlayed: '2/10', augHoursPlayed: 4, augCourtHours: '3.6', augCalories: '1,782'
+                balance: 'AED 44', totalPaid: 'AED 1,302', totalExpense: 'AED 1,258', delayPay: 'AED 0',
+                negativeWeeks: 0, notPlayedSince: '-', longestStreak: 11, currentStreak: 2,
+                daysPlayed: '25/86', hoursPlayed: 45, hoursLast30: 6, caloriesBurned: '19,098',
+                sepDaysPlayed: '1/1', sepHoursPlayed: 2, sepCourtHours: '1.6', sepCalories: '792'
             },
             'Sarthak': {
-                balance: 'AED 856', totalPaid: 'AED 1,875', totalExpense: 'AED 1,019', delayPay: 'AED 0',
-                negativeWeeks: 0, notPlayedSince: '-', longestStreak: 11, currentStreak: 11,
-                daysPlayed: '15/85', hoursPlayed: 30, hoursLast30: 16, caloriesBurned: '13,188',
-                augDaysPlayed: '8/10', augHoursPlayed: 16, augCourtHours: '14.7', augCalories: '7,300'
+                balance: 'AED 793', totalPaid: 'AED 1,875', totalExpense: 'AED 1,082', delayPay: 'AED 0',
+                negativeWeeks: 0, notPlayedSince: '-', longestStreak: 12, currentStreak: 12,
+                daysPlayed: '16/86', hoursPlayed: 32, hoursLast30: 16, caloriesBurned: '13,984',
+                sepDaysPlayed: '1/1', sepHoursPlayed: 2, sepCourtHours: '1.6', sepCalories: '795'
             },
             'Upkar Sir': {
                 balance: 'AED (90)', totalPaid: 'AED 552', totalExpense: 'AED 642', delayPay: 'AED 0',
-                negativeWeeks: 4, notPlayedSince: '2', longestStreak: 8, currentStreak: 0,
-                daysPlayed: '4/85', hoursPlayed: 5, hoursLast30: 3, caloriesBurned: '2,204',
-                augDaysPlayed: '3/10', augHoursPlayed: 3, augCourtHours: '2.7', augCalories: '1,354'
+                negativeWeeks: 5, notPlayedSince: '3', longestStreak: 8, currentStreak: 0,
+                daysPlayed: '4/86', hoursPlayed: 5, hoursLast30: 3, caloriesBurned: '2,204',
+                sepDaysPlayed: '0/1', sepHoursPlayed: 0, sepCourtHours: '0.0', sepCalories: '0'
             },
             'Akhil': {
                 balance: 'AED 0', totalPaid: 'AED 213', totalExpense: 'AED 213', delayPay: 'AED 0',
-                negativeWeeks: 0, notPlayedSince: '4', longestStreak: 4, currentStreak: 0,
-                daysPlayed: '4/85', hoursPlayed: 8, hoursLast30: 2, caloriesBurned: '3,397',
-                augDaysPlayed: '1/10', augHoursPlayed: 2, augCourtHours: '2.0', augCalories: '980'
+                negativeWeeks: 0, notPlayedSince: '5', longestStreak: 4, currentStreak: 0,
+                daysPlayed: '4/86', hoursPlayed: 8, hoursLast30: 0, caloriesBurned: '3,397',
+                sepDaysPlayed: '0/1', sepHoursPlayed: 0, sepCourtHours: '0.0', sepCalories: '0'
             },
             'Saurabh': {
-                balance: 'AED (126)', totalPaid: 'AED -', totalExpense: 'AED 126', delayPay: 'AED 0',
-                negativeWeeks: 2, notPlayedSince: '-', longestStreak: 2, currentStreak: 2,
-                daysPlayed: '2/85', hoursPlayed: 4, hoursLast30: 4, caloriesBurned: '1,870',
-                augDaysPlayed: '2/10', augHoursPlayed: 4, augCourtHours: '3.8', augCalories: '1,870'
+                balance: 'AED (0)', totalPaid: 'AED 126', totalExpense: 'AED 126', delayPay: 'AED 0',
+                negativeWeeks: 3, notPlayedSince: '1', longestStreak: 2, currentStreak: 0,
+                daysPlayed: '2/86', hoursPlayed: 4, hoursLast30: 4, caloriesBurned: '1,870',
+                sepDaysPlayed: '0/1', sepHoursPlayed: 0, sepCourtHours: '0.0', sepCalories: '0'
             }
         };
 
@@ -742,10 +742,10 @@
             document.getElementById('hoursLast30').textContent = data.hoursLast30 + ' hrs';
             document.getElementById('caloriesBurned').textContent = data.caloriesBurned;
             
-            document.getElementById('augDaysPlayed').textContent = data.augDaysPlayed;
-            document.getElementById('augHoursPlayed').textContent = data.augHoursPlayed + ' hrs';
-            document.getElementById('augCourtHours').textContent = data.augCourtHours + ' hrs';
-            document.getElementById('augCalories').textContent = data.augCalories;
+            document.getElementById('sepDaysPlayed').textContent = data.sepDaysPlayed;
+            document.getElementById('sepHoursPlayed').textContent = data.sepHoursPlayed + ' hrs';
+            document.getElementById('sepCourtHours').textContent = data.sepCourtHours + ' hrs';
+            document.getElementById('sepCalories').textContent = data.sepCalories;
 
             const hoursProgress = Math.min((data.hoursPlayed / 150) * 100, 100);
             document.getElementById('performanceBar').style.width = hoursProgress + '%';
