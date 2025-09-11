@@ -2,6 +2,7 @@
 import csv
 import json
 import re
+from datetime import datetime
 
 def update_data():
     index_file_path = 'C:\\Users\\Mr. Abhishek Lohiya\\Desktop\\Badminton Account\\BaddyAutomation\\badminton\\index.html'
@@ -38,13 +39,17 @@ def update_data():
     # Convert python dict to a string that looks like a JS object
     js_object_str = json.dumps(csv_data, indent=12).replace('"', "'")
 
-    # Use regex to replace the old playerData object with the new one
-    new_content = re.sub(r'const playerData = .*?;', f'const playerData = {js_object_str};', content, flags=re.DOTALL)
+    # Update player data
+    content = re.sub(r'const playerData = .*?;', f'const playerData = {js_object_str};', content, flags=re.DOTALL)
+
+    # Update the last updated date
+    current_date = datetime.now().strftime('%B %d, %Y')
+    content = re.sub(r'<p class="last-updated">Last Updated: .*?</p>', f'<p class="last-updated">Last Updated: {current_date}</p>', content)
 
     with open(index_file_path, 'w', encoding='utf-8') as file:
-        file.write(new_content)
+        file.write(content)
 
-    print("Successfully updated player data in index.html")
+    print("Successfully updated player data and date in index.html")
 
 if __name__ == '__main__':
     update_data()
