@@ -42,8 +42,12 @@ def update_data():
     match = re.search(r'const playerData = (.*?);', content, re.DOTALL)
     if match:
         html_data_str = match.group(1)
+        # Be more robust in parsing the JS object
+        # 1. Add quotes around keys
         html_data_str = re.sub(r'([\w\s]+):', r'"\1":', html_data_str)
+        # 2. Replace single quotes with double quotes
         html_data_str = html_data_str.replace("'", '"')
+        # 3. Remove trailing commas
         html_data_str = re.sub(r',(\s*[}\]])', r'\1', html_data_str)
         try:
             html_data = json.loads(html_data_str)
@@ -52,14 +56,7 @@ def update_data():
             new_players = csv_players - html_players
             removed_players = html_players - csv_players
 
-            if new_players:
-                print("New players added:", ", ".join(new_players))
-            if removed_players:
-                print("Players removed:", ", ".join(removed_players))
-            if not new_players and not removed_players:
-                print("No players added or removed.")
-
-            # If there are new players, update the initialPasswords object
+            # If there are new or removed players, update the initialPasswords object
             if new_players or removed_players:
                 password_match = re.search(r'const initialPasswords = {([^}]*)};', content)
                 if password_match:
@@ -85,8 +82,6 @@ def update_data():
                     
                     # Replace the old passwords object with the new one
                     content = re.sub(r'const initialPasswords = {([^}]*)};', f'const initialPasswords = {{{new_passwords_str}}};', content)
-                    print("Updated initial passwords.")
-
 
         except json.JSONDecodeError as e:
             print(f"Could not parse existing player data in index.html: {e}")
