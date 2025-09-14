@@ -42,7 +42,7 @@ def update_data():
     match = re.search(r'const playerData = (.*?);', content, re.DOTALL)
     if match:
         html_data_str = match.group(1)
-        html_data_str = re.sub(r'(\w+):', r'"\1":', html_data_str)
+        html_data_str = re.sub(r'([\w\s]+):', r'"\1":', html_data_str)
         html_data_str = html_data_str.replace("'", '"')
         html_data_str = re.sub(r',(\s*[}\]])', r'\1', html_data_str)
         try:
@@ -60,7 +60,7 @@ def update_data():
                 print("No players added or removed.")
 
             # If there are new players, update the initialPasswords object
-            if new_players:
+            if new_players or removed_players:
                 password_match = re.search(r'const initialPasswords = {([^}]*)};', content)
                 if password_match:
                     passwords_str = password_match.group(1)
@@ -75,13 +75,17 @@ def update_data():
 
                     for player in new_players:
                         passwords[player] = f'{player.lower()}123'
+                    
+                    for player in removed_players:
+                        if player in passwords:
+                            del passwords[player]
 
                     # Convert back to JS object string format
                     new_passwords_str = ', '.join([f"'{k}': '{v}'" for k, v in passwords.items()])
                     
                     # Replace the old passwords object with the new one
                     content = re.sub(r'const initialPasswords = {([^}]*)};', f'const initialPasswords = {{{new_passwords_str}}};', content)
-                    print("Updated initial passwords for new players.")
+                    print("Updated initial passwords.")
 
 
         except json.JSONDecodeError as e:
@@ -89,7 +93,7 @@ def update_data():
 
 
     # Convert python dict to a string that looks like a JS object
-    js_object_str = json.dumps(csv_data, indent=12).replace("'", '"')
+    js_object_str = json.dumps(csv_data, indent=12).replace('"', "'")
 
     # Update player data
     content = re.sub(r'const playerData = .*?;', f'const playerData = {js_object_str};', content, flags=re.DOTALL)
